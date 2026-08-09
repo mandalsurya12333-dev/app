@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile · Dashboard App</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="profile-page">
+  <main class="profile-app-shell">
+    <header class="profile-header">
+      <a class="profile-back" href="index.html" aria-label="Back to dashboard">
+        <i data-lucide="chevron-left" aria-hidden="true"></i><span>Back</span>
+      </a>
+      <h1>Profile</h1>
+      <button id="open-profile-qr" class="profile-qr" type="button" aria-label="Show profile QR code">(QR)</button>
+    </header>
+
+    <div class="profile-scroll-area">
+      <section class="profile-summary" aria-labelledby="profile-name">
+        <!-- Replace public/profile-photo.jpg with the student's uploaded photo. -->
+        <div class="profile-photo-frame">
+          <img src="./public/profile.png" alt="Surya Narayan Mandal" onerror="this.hidden=true;">
+        </div>
+        <h2 id="profile-name">Surya Narayan Mandal</h2>
+        <p>P132:B.Tech. (Computer Science and Engineering) (2023)</p>
+      </section>
+
+      <section class="profile-section" aria-labelledby="basic-heading">
+        <h2 id="basic-heading" class="profile-section-title">Basic</h2>
+        <dl class="profile-details">
+          <div><dt>Father's Name</dt><dd>Sujit Mandal</dd></div>
+          <div><dt>Mother's Name</dt><dd>Rachana Devi Mandal</dd></div>
+          <div><dt>Permanent Address</dt><dd>Gital Para, Haidarpara, Ward No 40, Siliguri - 734006-<br>Distt:Darjeeling -(West Bengal) - India</dd></div>
+          <div><dt>Correspondence Address</dt><dd>Gital Para, Haidarpara, Ward No 40, Siliguri - 734006-<br>Distt:Darjeeling -(West Bengal) - India</dd></div>
+          <div><dt>Contact No.</dt><dd>7602548747</dd></div>
+          <div><dt>Email</dt><dd>suryanmandal393@gmail.com</dd></div>
+          <div><dt>Date Of Birth</dt><dd>03 Sep 2003</dd></div>
+          <div><dt>Student Gender</dt><dd>Male</dd></div>
+        </dl>
+      </section>
+
+      <section class="profile-section" aria-labelledby="academic-heading">
+        <h2 id="academic-heading" class="profile-section-title">Academic Details</h2>
+        <dl class="profile-details">
+          <div><dt>Program</dt><dd>P132:B.Tech. (Computer Science and Engineering)<br>(2023)</dd></div>
+          <div><dt>Admission Session</dt><dd>2023-1</dd></div>
+          <div><dt>Batch</dt><dd>2023</dd></div>
+          <div><dt>Section</dt><dd>K4P23CW</dd></div>
+          <div><dt>TPC</dt><dd>20339::Dr. Usha Mittal (01824520140)</dd></div>
+        </dl>
+      </section>
+
+      <section class="profile-section" aria-labelledby="hostel-heading">
+        <h2 id="hostel-heading" class="profile-section-title">Hostel Details</h2>
+        <dl class="profile-details">
+          <div><dt>Hostel</dt><dd>Boys Hostel-06- B508-Bed C (Standard Air Cooled 4 Seater)</dd></div>
+          <div><dt>Warden</dt><dd>34862::Karnail Singh Jaryal (9501110445)</dd></div>
+          <div><dt>Allocated Mess</dt><dd>—</dd></div>
+        </dl>
+      </section>
+    </div>
+  </main>
+
+  <!-- QR bottom sheet -->
+  <div id="profile-qr-modal" class="profile-qr-modal" aria-hidden="true">
+    <button id="profile-qr-backdrop" class="profile-qr-backdrop" type="button" aria-label="Close QR popup"></button>
+    <section class="profile-qr-sheet" role="dialog" aria-modal="true" aria-labelledby="profile-qr-title">
+      <div class="profile-qr-handle" aria-hidden="true"></div>
+      <div class="profile-qr-sheet-header">
+        <h2 id="profile-qr-title">QR</h2>
+        <button id="close-profile-qr" type="button">Close</button>
+      </div>
+      <div class="profile-qr-content">
+        <!-- Replace public/profile-qr.png with the student's QR image. -->
+        <div class="profile-qr-image-wrap">
+          <img src="././public/qr.png" alt="Surya Narayan Mandal QR code" onerror="this.hidden=true; this.parentElement.classList.add('profile-qr-image-missing');">
+          <span>Add <code>public/profile-qr.png</code></span>
+        </div>
+        <dl class="profile-qr-details">
+          <div><dt>Name:</dt><dd>Surya Narayan Mandal</dd></div>
+          <div><dt>Program:</dt><dd>P132:B.Tech. (Computer Science and Engineering) (2023)</dd></div>
+          <div><dt>Hostel:</dt><dd>Boys Hostel-06- B508-Bed C (Standard Air Cooled 4 Seater)</dd></div>
+        </dl>
+      </div>
+    </section>
+  </div>
+
+  <script src="profile.js"></script>
+</body>
+</html>

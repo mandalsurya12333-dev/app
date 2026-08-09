@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mess Food Scanner</title>
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+  <style>
+    :root { font-family: Inter, Arial, sans-serif; color: #303030; background: #f3f4f6; }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; background: #f3f4f6; }
+    button { font: inherit; cursor: pointer; }
+    .app { width: 100%; max-width: 480px; min-height: 100vh; margin: 0 auto; background: #f2f2f2; }
+    .topbar { height: 82px; padding: 0 18px; display: grid; grid-template-columns: 42px 1fr auto; gap: 14px; align-items: center; background: #303030; color: #fff; box-shadow: 0 2px 5px #0005; }
+    .back { display: inline-flex; align-items: center; width: fit-content; color: inherit; font-size: 0; text-decoration: none; }
+    .back::before { content: '‹'; font-size: 56px; font-weight: 300; line-height: .6; }
+    .topbar h1 { margin: 0; font-size: 23px; font-weight: 400; text-align: center; }
+    .topbar .history { font-size: 21px; white-space: nowrap; }
+    .content { padding: 16px 30px 32px; }
+    .student { padding: 43px 39px 52px; border-radius: 2px; color: #353535; background: linear-gradient(to top right, #ff8879 0%, #ffaf70 49%, #ffd36b 100%); box-shadow: 0 3px 7px #0002; }
+    .photo { width: 170px; height: 202px; margin: 0 auto 16px; overflow: hidden; border-radius: 13px; background: #fff; }
+    .photo img { width: 100%; height: 100%; object-fit: cover; }
+    .student h2 { margin: 0 0 51px; text-align: center; font-size: 20px; font-weight: 400; }
+    .student p { margin: 4px 0 0; font-size: 18px; line-height: 1.42; }
+    .student strong { display: block; font-size: 18px; font-weight: 600; }
+    .card { margin-top: 28px; padding: 42px 22px 30px; border-radius: 0; background: #fff; text-align: center; box-shadow: 0 2px 7px #0001; }
+    .card p { margin: 0 0 25px; font-size: 28px; line-height: 1.25; }
+    .rate { margin: 0 0 33px; padding: 3px 13px; border: 2px solid #a9514c; border-radius: 11px; background: white; color: #353535; font-size: 17px; }
+    .meals { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px 31px; }
+    .meal { min-height: 80px; border: 0; border-radius: 0; color: #383838; font-size: 18px; font-weight: 500; background: linear-gradient(to top right, #ff8879 0%, #ffaf70 49%, #ffd36b 100%); box-shadow: 0 5px 7px #0004; }
+    .meal:nth-child(3) { grid-column: 1; }
+    @media (max-width: 390px) { .content { padding: 14px 18px 28px; } .student { padding: 30px 28px 40px; } .photo { width: 145px; height: 172px; } .student h2 { margin-bottom: 38px; } .card p { font-size: 24px; } }
+    .scanner { position: fixed; z-index: 10; inset: 0; display: none; overflow: hidden; background: #151515; color: #fff; }
+    .scanner.open { display: flex; }
+    #qr-reader { position: absolute; inset: 0; border: 0 !important; background: #222; }
+    #qr-reader > div { border: 0 !important; }
+    #qr-reader__dashboard { display: none !important; }
+    #qr-reader video { width: 100% !important; height: 100% !important; object-fit: cover !important; }
+    .scanner-overlay { position: absolute; z-index: 2; inset: 0; pointer-events: none; background: rgb(0 0 0 / 34%); }
+    .scanner-back { position: absolute; z-index: 3; top: 22px; left: 17px; border: 0; border-radius: 50%; width: 45px; height: 45px; color: #fff; background: rgb(0 0 0 / 38%); font-size: 32px; line-height: 1; }
+    .scan-frame { position: absolute; top: 50%; left: 50%; width: min(66vw, 280px); aspect-ratio: 1; border: 1px solid rgb(255 255 255 / 72%); transform: translate(-50%, -54%); }
+    .scan-line { position: absolute; top: 50%; right: 0; left: 0; height: 2px; background: #ef5362; transform: translateY(-50%); }
+    .scan-particles { position: absolute; inset: 0; overflow: hidden; }
+    .scan-particle { position: absolute; width: 4px; height: 4px; border-radius: 50%; background: #f6e73d; box-shadow: 0 0 5px #fff68a; animation: dot-fade 780ms ease-out forwards; }
+    .green-dot { position: absolute; width: 17px; height: 17px; border: 3px solid #4d4d4d; border-radius: 0; background: #a8e535; box-shadow: 0 0 8px #a8e535; opacity: 0; transition: opacity 100ms ease; }
+    .green-dot.one { top: 20%; left: 20%; }.green-dot.two { top: 20%; right: 20%; }.green-dot.three { bottom: 20%; left: 20%; }
+    .qr-detected .green-dot { opacity: 1; animation: detected-dot 360ms ease-in-out infinite alternate; }
+    @keyframes dot-fade { from { opacity: .95; transform: scale(1); } to { opacity: 0; transform: translateY(-14px) scale(.35); } }
+    @keyframes detected-dot { from { transform: scale(.8); } to { transform: scale(1.18); } }
+    .scanner-help { position: absolute; z-index: 3; right: 0; bottom: 0; left: 0; padding: 20px 22px 28px; text-align: center; background: linear-gradient(transparent, rgb(0 0 0 / 82%)); pointer-events: auto; }
+    .scanner-help p { margin: 0 auto 14px; max-width: 340px; font-size: 14px; line-height: 1.45; color: #f3f3f3; }
+    .scanner-help button { display: none; border: 1px solid #fff; border-radius: 999px; padding: 10px 17px; background: transparent; color: #fff; font-size: 14px; }
+    .scanner-help.fallback button { display: inline-block; }
+    .scanner-help.fallback p { color: #ffd669; }
+    .pass { position: fixed; z-index: 20; inset: 0; display: none; overflow-y: auto; background: #f8f8f8; color: #252525; }
+    .pass.open { display: block; }
+    .pass-head { position: relative; height: 110px; padding: 32px 22px 12px; background: #333; color: #fff; text-align: center; }
+    .pass-handle { width: 71px; height: 8px; margin: -25px auto 14px; border-radius: 10px; background: #dedede; }
+    .pass-head h2 { margin: 0; font-size: 29px; font-weight: 400; }
+    .pass-close { position: absolute; top: 28px; right: 20px; border: 0; background: transparent; color: #fff; font-size: 39px; font-weight: 300; line-height: 1; }
+    .pass-panel { position: relative; min-height: calc(100vh - 110px); margin: 20px 39px 0; padding: 70px 24px 40px; background: #fff; border: 1px solid #bcbcbc; border-radius: 28px 28px 0 0; box-shadow: 0 2px 8px #0002; }
+    .pass-timer { position: absolute; top: -21px; right: -19px; display: grid; width: 72px; height: 72px; place-items: center; border-radius: 50%; background: #d9d9d9; color: #333; font-size: 41px; font-weight: 500; }
+    .pass-identities { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; text-align: center; }
+    .pass-identity { min-width: 0; }
+    .pass-image { width: 100%; aspect-ratio: 1; padding: 28px; overflow: hidden; border: 2px solid #6d6d6d; background: #fff; box-shadow: 0 4px 9px #0003; }
+    .pass-image img { width: 100%; height: 100%; object-fit: contain; }
+    .pass-profile img { object-fit: cover; }
+    .pass-identity strong, .pass-identity span { display: block; margin-top: 21px; font-size: 22px; line-height: 1.35; }
+    .pass-identity strong { font-weight: 600; }.pass-identity span { margin-top: 4px; }
+    .pass-program, .pass-assigned { margin: 71px 0 0; text-align: center; font-size: 23px; line-height: 1.45; }
+    .pass-assigned { margin-top: 57px; }
+    .pass-datetime { display: flex; justify-content: space-between; margin: 94px 0 0; font-size: 24px; font-weight: 500; }
+    .pass-approved { margin: 77px 0 20px; color: #65d236; text-align: center; font-size: 37px; font-weight: 700; }
+    .pass-rate { display: block; width: 150px; margin: 0 auto; padding: 8px 10px; border: 3px solid #9b332f; border-radius: 15px; background: #fff; color: #252525; font-size: 25px; line-height: 1.05; }
+    .pass-rate span { color: #ffd350; }
+    @media (max-width: 390px) { .pass-panel { margin: 14px 20px 0; padding: 55px 17px 30px; } .pass-identities { gap: 16px; } .pass-image { padding: 18px; } .pass-identity strong, .pass-identity span { font-size: 18px; } .pass-program, .pass-assigned { font-size: 20px; } .pass-datetime { margin-top: 65px; font-size: 19px; } .pass-approved { margin-top: 58px; font-size: 31px; } }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="topbar"><a class="back" href="index.html">Back</a><h1>Mess Coupon</h1><span class="history">Meal History</span></header>
+    <div class="content">
+      <section class="student">
+        <div class="photo"><img src="./public/profile.png" alt="Surya Narayan Mandal" onerror="this.hidden=true"></div>
+        <h2>Surya Narayan Mandal</h2>
+        <strong>Program Name</strong><p>P132:B.Tech. (Computer Science and Engineering)</p>
+        <strong style="margin-top:12px">Hostel</strong><p>Boys Hostel-06- B508-Bed C</p>
+      </section>
+      <section class="card"><p>Tap on the meal name to<br>scan and avail food.</p><button class="rate" type="button">⭐ RATE US</button><div class="meals"><button class="meal" data-meal="Breakfast">BreakFast&nbsp; →</button><button class="meal" data-meal="Lunch">Lunch&nbsp; →</button><button class="meal" data-meal="Dinner">Dinner&nbsp; →</button></div></section>
+    </div>
+  </main>
+  <section id="scanner" class="scanner" aria-hidden="true">
+    <div id="qr-reader"></div>
+    <div class="scanner-overlay" aria-hidden="true"><div id="scan-frame" class="scan-frame"><div id="scan-particles" class="scan-particles"></div><div class="scan-line"></div><i class="green-dot one"></i><i class="green-dot two"></i><i class="green-dot three"></i></div></div>
+    <button id="close-scanner" class="scanner-back" aria-label="Back to meals">‹</button>
+    <div id="scanner-help" class="scanner-help"><p id="scanner-message">Place a QR code inside the camera view to scan it.</p><button id="continue-without-camera">Continue without camera</button></div>
+  </section>
+  <section id="pass" class="pass" aria-hidden="true">
+    <header class="pass-head"><div class="pass-handle"></div><h2>Mess Pass</h2><button id="close-pass" class="pass-close" aria-label="Close mess pass">×</button></header>
+    <main class="pass-panel">
+      <div id="pass-timer" class="pass-timer">30</div>
+      <div class="pass-identities">
+        <div class="pass-identity"><div class="pass-image pass-profile"><img src="./public/profile.png" alt="Student photo" onerror="this.hidden=true"></div><strong>12316812</strong><span>Surya Narayan<br>Mandal</span></div>
+        <div class="pass-identity"><div class="pass-image"><img src="./public/qr.png" alt="Mess QR code" onerror="this.hidden=true"></div><strong id="pass-meal">Dinner</strong><span>Mess BH-6</span></div>
+      </div>
+      <p class="pass-program">P132:B.Tech. (Computer Science and<br>Engineering) (2023)</p>
+      <p class="pass-assigned">Your Assigned Mess - Mess BH-6</p>
+      <div class="pass-datetime"><time id="pass-date"></time><time id="pass-time"></time></div>
+      <p id="pass-title" class="pass-approved">Meal Approved</p>
+      <button class="pass-rate" type="button"><span>★</span> RATE<br>US</button>
+    </main>
+  </section>
+  <audio id="scan-pop-sound" src="public/pop.m4a" preload="auto"></audio>
+  <script>
+    const scanner = document.getElementById('scanner');
+    const help = document.getElementById('scanner-help');
+    const message = document.getElementById('scanner-message');
+    const pass = document.getElementById('pass');
+    let scannerInstance = null;
+    let meal = '';
+    let passTimer = null;
+    let scanCompletionStarted = false;
+    const scanPopSound = document.getElementById('scan-pop-sound');
+
+    function stopCamera() {
+      if (scannerInstance) { scannerInstance.stop().catch(() => {}).finally(() => { scannerInstance = null; }); }
+    }
+    function closeScanner() { stopCamera(); scanner.classList.remove('open', 'qr-detected'); scanner.setAttribute('aria-hidden', 'true'); }
+    function completeScan() {
+      if (scanCompletionStarted) return;
+      scanCompletionStarted = true;
+      scanner.classList.add('qr-detected');
+      scanPopSound.currentTime = 0;
+      scanPopSound.play().catch(() => {});
+      setTimeout(showPass, 300);
+    }
+    function showPass() {
+      closeScanner();
+      const now = new Date();
+      document.getElementById('pass-meal').textContent = meal;
+      document.getElementById('pass-date').textContent = now.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' });
+      document.getElementById('pass-time').textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+      let seconds = 30;
+      const timer = document.getElementById('pass-timer');
+      timer.textContent = seconds;
+      clearInterval(passTimer);
+      passTimer = setInterval(() => { seconds -= 1; timer.textContent = seconds; if (seconds <= 0) closePass(); }, 1000);
+      pass.classList.add('open');
+      pass.setAttribute('aria-hidden', 'false');
+    }
+    function closePass() { clearInterval(passTimer); pass.classList.remove('open'); pass.setAttribute('aria-hidden', 'true'); }
+    function fallback(text) { message.textContent = text; help.classList.add('fallback'); }
+    function openScanner(selectedMeal) {
+      meal = selectedMeal; scanCompletionStarted = false; help.classList.remove('fallback'); scanner.classList.remove('qr-detected'); message.textContent = 'Place a QR code inside the camera view to scan it.';
+      scanner.classList.add('open'); scanner.setAttribute('aria-hidden', 'false');
+      if (!window.isSecureContext || !navigator.mediaDevices?.getUserMedia) { fallback('Camera needs HTTPS or localhost. You can still continue without the camera.'); return; }
+      if (typeof Html5Qrcode === 'undefined') { fallback('The QR scanner could not load. Check your internet connection and refresh.'); return; }
+      scannerInstance = new Html5Qrcode('qr-reader');
+      scannerInstance.start({ facingMode: 'environment' }, { fps: 10, qrbox: { width: 240, height: 240 } }, completeScan, () => {})
+        .catch(() => fallback('Camera permission was not granted. Allow camera access, then try again.'));
+    }
+    document.querySelectorAll('.meal').forEach(button => button.addEventListener('click', () => openScanner(button.dataset.meal)));
+    // Demo behavior: a tap anywhere in the camera area completes the scan.
+    scanner.addEventListener('click', (event) => {
+      if (event.target.closest('button') || event.target.closest('header')) return;
+      if (scanner.classList.contains('open')) completeScan();
+    });
+    document.getElementById('close-scanner').addEventListener('click', closeScanner);
+    document.getElementById('continue-without-camera').addEventListener('click', completeScan);
+    document.getElementById('close-pass').addEventListener('click', closePass);
+    const scanParticles = document.getElementById('scan-particles');
+    setInterval(() => {
+      if (!scanner.classList.contains('open')) return;
+      const dot = document.createElement('i');
+      dot.className = 'scan-particle';
+      dot.style.left = (8 + Math.random() * 84) + '%';
+      dot.style.top = (10 + Math.random() * 80) + '%';
+      scanParticles.appendChild(dot);
+      setTimeout(() => dot.remove(), 800);
+    }, 260);
+  </script>
+</body>
+</html>

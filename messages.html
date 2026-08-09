@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Messages</title>
+  <link rel="stylesheet" href="styles.css">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              coral: "#ff7b62",
+              yellow: "#facc40",
+              peach: "#fbd3a3",
+              beige: "#fffbf2",
+              dark: "#333333",
+              green: "#22c55e",
+              bg: "#fafafa",
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="min-h-screen bg-gray-100 flex justify-center font-sans">
+  
+  <!-- Mobile Container -->
+  <div class="w-full max-w-md bg-[#f5f5f5] min-h-screen relative shadow-2xl flex flex-col">
+    
+    <!-- Header -->
+    <header class="flex items-center justify-between px-2 py-3 bg-[#222222] text-white sticky top-0 z-40">
+      <a href="index.html" class="p-2 flex items-center text-white hover:text-gray-300 transition-colors">
+        <i data-lucide="chevron-left" class="w-6 h-6"></i>
+        <span class="text-base font-normal -ml-1">Back</span>
+      </a>
+      <h1 class="text-base font-normal tracking-wide flex-1 text-center">My Messages</h1>
+      <button class="p-2 w-16 flex justify-end text-white hover:text-gray-300">
+        <i data-lucide="calendar" class="w-5 h-5"></i>
+      </button>
+    </header>
+
+    <!-- Search Bar -->
+    <div class="px-2 py-2 bg-[#f5f5f5] sticky top-[60px] z-30">
+      <div class="relative bg-white border border-gray-200 rounded-sm shadow-sm flex items-center px-3 py-2">
+        <i data-lucide="search" class="w-5 h-5 text-gray-500 mr-2"></i>
+        <input type="text" placeholder="Search" class="w-full text-base focus:outline-none text-gray-700 bg-transparent placeholder-gray-400">
+      </div>
+    </div>
+
+    <!-- Messages List -->
+    <div class="flex-1 overflow-y-auto px-2 pb-6 pt-2 space-y-2">
+      <!-- Message 1 -->
+      <div class="bg-white rounded border border-gray-200 shadow-sm p-3">
+        <h3 class="text-gray-700 font-medium text-[15px] mb-1">Mentor Changed</h3>
+        <p class="text-gray-500 text-[14px] leading-relaxed mb-2">Dear Student, Your mentor has been changed and your new mentor is Dr.Atul Sharma (30444). To know your authority in detail visit the UMS Dashboard</p>
+        <p class="text-brand-coral text-[13px]">Dr. Sourabh Kumar (Aug 08, 2026)</p>
+      </div>
+      
+      <!-- Message 2 -->
+      <div class="bg-white rounded border border-gray-200 shadow-sm p-3">
+        <h3 class="text-gray-700 font-medium text-[15px] mb-1">Full Term Internship - HOUSE OF EDTECH</h3>
+        <p class="text-gray-500 text-[14px] leading-relaxed mb-2">Dear Student, You are eligible for Full Term Internship of HOUSE OF EDTECH. Date will be notified later. Check venue through UMS. Register by Aug 12 2026 1:00PM. BEST Wishes, LPU</p>
+        <p class="text-brand-coral text-[13px]">Office of Director DCS (Aug 08, 2026)</p>
+      </div>
+      
+      <!-- Message 3 -->
+      <div class="bg-white rounded border border-gray-200 shadow-sm p-3">
+        <h3 class="text-gray-700 font-medium text-[15px] mb-1">Full Term Internship - HOUSE OF EDTECH</h3>
+        <p class="text-gray-500 text-[14px] leading-relaxed mb-2">Dear Student, You are eligible for Full Term Internship of HOUSE OF EDTECH. Date will be notified later. Check venue through UMS. Register by Aug 12 2026 1:00PM. BEST Wishes, LPU</p>
+        <p class="text-brand-coral text-[13px]">Office of Director DCS (Aug 08, 2026)</p>
+      </div>
+      
+      <!-- Message 4 -->
+      <div class="bg-white rounded border border-gray-200 shadow-sm p-3">
+        <h3 class="text-gray-700 font-medium text-[15px] mb-1">Duty Leave - Duty Leave to students for Summer External Technical Training of students graduating in 2027</h3>
+        <p class="text-gray-500 text-[14px] leading-relaxed mb-2">Your Duty Leave for event Duty Leave to students for Summer External Technical Training...</p>
+        <p class="text-brand-coral text-[13px]">Registrar Office (Aug 07, 2026)</p>
+      </div>
+
+      <!-- Dummy extra messages -->
+      <div class="bg-white rounded border border-gray-200 shadow-sm p-3">
+        <h3 class="text-gray-700 font-medium text-[15px] mb-1">Fee Reminder - Installment 2</h3>
+        <p class="text-gray-500 text-[14px] leading-relaxed mb-2">Dear Student, this is a gentle reminder to pay your 2nd installment for the current semester by Aug 15, 2026 to avoid late fees.</p>
+        <p class="text-brand-coral text-[13px]">Accounts Department (Aug 06, 2026)</p>
+      </div>
+
+      <div class="bg-white rounded border border-gray-200 shadow-sm p-3">
+        <h3 class="text-gray-700 font-medium text-[15px] mb-1">Library Book Overdue</h3>
+        <p class="text-gray-500 text-[14px] leading-relaxed mb-2">The book "Introduction to Algorithms" is overdue. Please return it to the central library immediately.</p>
+        <p class="text-brand-coral text-[13px]">Central Library (Aug 05, 2026)</p>
+      </div>
+
+      <div class="bg-white rounded border border-gray-200 shadow-sm p-3">
+        <h3 class="text-gray-700 font-medium text-[15px] mb-1">Holiday Announcement</h3>
+        <p class="text-gray-500 text-[14px] leading-relaxed mb-2">The university will remain closed on Aug 15th on the occasion of Independence Day.</p>
+        <p class="text-brand-coral text-[13px]">HR & Admin (Aug 01, 2026)</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+  </script>
+</body>
+</html>
