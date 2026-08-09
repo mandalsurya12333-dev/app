@@ -73,7 +73,27 @@
     .pass-approved { margin: 77px 0 20px; color: #65d236; text-align: center; font-size: 37px; font-weight: 700; }
     .pass-rate { display: block; width: 150px; margin: 0 auto; padding: 8px 10px; border: 3px solid #9b332f; border-radius: 15px; background: #fff; color: #252525; font-size: 25px; line-height: 1.05; }
     .pass-rate span { color: #ffd350; }
-    @media (max-width: 390px) { .pass-panel { margin: 14px 20px 0; padding: 55px 17px 30px; } .pass-identities { gap: 16px; } .pass-image { padding: 18px; } .pass-identity strong, .pass-identity span { font-size: 18px; } .pass-program, .pass-assigned { font-size: 20px; } .pass-datetime { margin-top: 65px; font-size: 19px; } .pass-approved { margin-top: 58px; font-size: 31px; } }
+    .pass-animation-frame { margin: 12px -24px 0; padding: 38px; background: #4b2d00; }
+    .pass-animation-stage { display: grid; min-height: 420px; place-items: center; overflow: hidden; background: #fff; }
+    .accepted-badge { display: flex; align-items: center; width: 11px; height: 11px; overflow: hidden; border: 3px solid #252525; border-radius: 999px; color: #10ad41; animation: accept-shell 4.2s cubic-bezier(.25,.7,.25,1) infinite; }
+    .accepted-badge i { display: grid; width: 0; height: 0; flex: 0 0 auto; place-items: center; margin-left: 0; border-radius: 50%; background: #13b843; color: #fff; font-size: 0; font-style: normal; line-height: 1; animation: accept-icon 4.2s ease-in-out infinite; }
+    .accepted-badge i::before { content: '✓'; opacity: 0; transform: scale(.3); animation: accept-check 4.2s ease-in-out infinite; }
+    .accepted-word-wrap { overflow: hidden; white-space: nowrap; }
+    .accepted-word { display: block; padding-left: 17px; padding-right: 23px; color: #10ad41; font-size: 38px; font-weight: 800; letter-spacing: .3px; line-height: 1; opacity: 0; transform: translateX(145px); animation: accept-word 4.2s cubic-bezier(.2,.8,.2,1) infinite; }
+    @keyframes accept-shell { 0%, 8% { width: 11px; height: 11px; border-width: 2px; opacity: .35; } 25% { width: 88px; height: 88px; border-width: 4px; opacity: 1; } 45% { width: 88px; height: 88px; } 62%, 84% { width: 410px; height: 88px; border-width: 4px; } 95%, 100% { width: 11px; height: 11px; border-width: 2px; opacity: 0; } }
+    @keyframes accept-icon { 0%, 14% { width: 0; height: 0; margin-left: 0; } 29%, 84% { width: 70px; height: 70px; margin-left: 7px; font-size: 54px; } 95%, 100% { width: 0; height: 0; margin-left: 0; font-size: 0; } }
+    @keyframes accept-check { 0%, 31% { opacity: 0; transform: scale(.25) rotate(-12deg); } 40%, 84% { opacity: 1; transform: scale(1) rotate(0); } 95%, 100% { opacity: 0; transform: scale(.25); } }
+    @keyframes accept-word { 0%, 47% { opacity: 0; transform: translateX(145px); } 54% { opacity: 1; transform: translateX(70px); } 67%, 84% { opacity: 1; transform: translateX(0); } 95%, 100% { opacity: 0; transform: translateX(-65px); } }
+    .pass-details-card { margin: 0 -24px; padding: 51px 22px 27px; border: 1px solid #c8c8c8; border-radius: 10px 10px 0 0; background: #fff; box-shadow: 0 3px 8px rgb(0 0 0 / 25%); }
+    .pass-details-card dl { margin: 0; }
+    .pass-details-card div { margin-bottom: 24px; }
+    .pass-details-card div:last-child { margin-bottom: 0; }
+    .pass-details-card dt, .pass-details-card dd { margin: 0; color: #858585; font-size: 23px; line-height: 1.38; }
+    .pass-details-card dt { font-weight: 500; }
+    .pass-details-card dd { margin-top: 5px; font-weight: 400; }
+    .verification-code { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 18px; margin: 40px -18px 0; padding: 20px 25px; border: 3px solid #3d3d3d; border-radius: 19px; background: #fff; color: #2f2f2f; font-size: 26px; line-height: 1; }
+    .verification-code strong { font-weight: 500; }
+    @media (max-width: 390px) { .pass-panel { margin: 14px 20px 0; padding: 55px 17px 30px; } .pass-identities { gap: 16px; } .pass-image { padding: 18px; } .pass-identity strong, .pass-identity span { font-size: 18px; } .pass-program, .pass-assigned { font-size: 20px; } .pass-datetime { margin-top: 65px; font-size: 19px; } .pass-approved { margin-top: 58px; font-size: 31px; } .pass-animation-frame { margin: 12px -17px 0; padding: 28px; } .pass-animation-stage { min-height: 330px; } .accepted-badge { transform: scale(.73); } .pass-details-card { margin: 0 -17px; padding: 36px 19px 22px; } .pass-details-card dt, .pass-details-card dd { font-size: 20px; } .verification-code { margin: 35px -12px 0; padding: 17px 20px; font-size: 22px; } }
   </style>
 </head>
 <body>
@@ -108,6 +128,18 @@
       <div class="pass-datetime"><time id="pass-date"></time><time id="pass-time"></time></div>
       <p id="pass-title" class="pass-approved">Meal Approved</p>
       <button class="pass-rate" type="button"><span>★</span> RATE<br>US</button>
+      <section class="pass-animation-frame" aria-label="Acceptance animation area">
+        <div class="pass-animation-stage"><div class="accepted-badge"><i></i><span class="accepted-word-wrap"><span class="accepted-word">ACCEPTED</span></span></div></div>
+      </section>
+      <section class="pass-details-card" aria-label="Student information">
+        <dl>
+          <div><dt>Father's Name</dt><dd>Sujit Mandal (7602548747)</dd></div>
+          <div><dt>Mother's Name</dt><dd>Rachana Devi Mandal (7602548747)</dd></div>
+          <div><dt>Session</dt><dd>P132:B.Tech. (Computer Science and<br>Engineering) (2027)</dd></div>
+          <div><dt>Hostel</dt><dd>Boys Hostel-06- B508-Bed B (Standard Air<br>Cooled 4 Seater)</dd></div>
+        </dl>
+      </section>
+      <section class="verification-code" aria-label="Verification code"><span>Verification Code</span><strong>20773978</strong></section>
     </main>
   </section>
   <audio id="scan-pop-sound" src="public/pop.m4a" preload="auto"></audio>
