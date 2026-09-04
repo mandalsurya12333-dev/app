@@ -1,92 +1,144 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Profile · Dashboard App</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Profile</title>
+  <script src="https://unpkg.com/@tailwindcss/browser@3"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="styles.css">
 </head>
-<body class="profile-page">
-  <main class="profile-app-shell">
-    <header class="profile-header">
-      <a class="profile-back" href="index.html" aria-label="Back to dashboard">
-        <i data-lucide="chevron-left" aria-hidden="true"></i><span>Back</span>
-      </a>
-      <h1>Profile</h1>
-      <button id="open-profile-qr" class="profile-qr" type="button" aria-label="Show profile QR code">(QR)</button>
-    </header>
 
-    <div class="profile-scroll-area">
-      <section class="profile-summary" aria-labelledby="profile-name">
-        <!-- Replace public/profile-photo.jpg with the student's uploaded photo. -->
-        <div class="profile-photo-frame">
-          <img src="./public/profile.png" alt="Surya Narayan Mandal" onerror="this.hidden=true;">
+<body class="bg-gray-100 font-sans text-gray-900 select-none overflow-x-hidden pb-10">
+
+  <!-- Header -->
+  <header class="bg-[#2c2c2e] px-4 py-3 flex items-center justify-between sticky top-0 z-50">
+    <a href="index.html" class="text-white flex items-center">
+      <i data-lucide="chevron-left" class="w-7 h-7 -ml-2"></i>
+      <span class="text-base font-normal">Back</span>
+    </a>
+    <h1 class="text-white text-lg font-medium">Profile</h1>
+    <button class="bg-[#e97d1e] text-white px-3 py-1 rounded-[10px] font-medium text-sm">
+      (QR)
+    </button>
+  </header>
+
+  <!-- Top Profile Card -->
+  <div class="p-4 bg-white">
+    <div class="bg-gradient-to-b from-[#ff8c72] to-[#facc40] rounded-xl p-6 text-center relative shadow-sm">
+      <div class="flex flex-col items-center">
+        <!-- Profile Photo -->
+        <div class="w-24 h-24 rounded-2xl overflow-hidden mb-3 bg-white flex items-center justify-center border-2 border-white/50">
+          <img src="profile-photo.png" alt="Profile" class="w-full h-full object-cover" onerror="this.onerror=null; this.src='https://i.pravatar.cc/150?img=11';">
         </div>
-        <h2 id="profile-name">Surya Narayan Mandal</h2>
-        <p>P132:B.Tech. (Computer Science and Engineering) (2023)</p>
-      </section>
-
-      <section class="profile-section" aria-labelledby="basic-heading">
-        <h2 id="basic-heading" class="profile-section-title">Basic</h2>
-        <dl class="profile-details">
-          <div><dt>Father's Name</dt><dd>Sujit Mandal</dd></div>
-          <div><dt>Mother's Name</dt><dd>Rachana Devi Mandal</dd></div>
-          <div><dt>Permanent Address</dt><dd>Gital Para, Haidarpara, Ward No 40, Siliguri - 734006-<br>Distt:Darjeeling -(West Bengal) - India</dd></div>
-          <div><dt>Correspondence Address</dt><dd>Gital Para, Haidarpara, Ward No 40, Siliguri - 734006-<br>Distt:Darjeeling -(West Bengal) - India</dd></div>
-          <div><dt>Contact No.</dt><dd>7602548747</dd></div>
-          <div><dt>Email</dt><dd>suryanmandal393@gmail.com</dd></div>
-          <div><dt>Date Of Birth</dt><dd>03 Sep 2003</dd></div>
-          <div><dt>Student Gender</dt><dd>Male</dd></div>
-        </dl>
-      </section>
-
-      <section class="profile-section" aria-labelledby="academic-heading">
-        <h2 id="academic-heading" class="profile-section-title">Academic Details</h2>
-        <dl class="profile-details">
-          <div><dt>Program</dt><dd>P132:B.Tech. (Computer Science and Engineering)<br>(2023)</dd></div>
-          <div><dt>Admission Session</dt><dd>2023-1</dd></div>
-          <div><dt>Batch</dt><dd>2023</dd></div>
-          <div><dt>Section</dt><dd>K4P23CW</dd></div>
-          <div><dt>TPC</dt><dd>20339::Dr. Usha Mittal (01824520140)</dd></div>
-        </dl>
-      </section>
-
-      <section class="profile-section" aria-labelledby="hostel-heading">
-        <h2 id="hostel-heading" class="profile-section-title">Hostel Details</h2>
-        <dl class="profile-details">
-          <div><dt>Hostel</dt><dd>Boys Hostel-06- B508-Bed C (Standard Air Cooled 4 Seater)</dd></div>
-          <div><dt>Warden</dt><dd>34862::Karnail Singh Jaryal (9501110445)</dd></div>
-          <div><dt>Allocated Mess</dt><dd>BH6M01 : Mess-1 BH-6</dd></div>
-        </dl>
-      </section>
+        <h3 class="text-gray-900 font-normal text-lg mb-1">Surya Narayan Mandal</h3>
+        <p class="text-gray-800 text-[13px] leading-snug">
+          P132:B.Tech. (Computer Science and Engineering)(2023)
+        </p>
+      </div>
     </div>
-  </main>
-
-  <!-- QR bottom sheet -->
-  <div id="profile-qr-modal" class="profile-qr-modal" aria-hidden="true">
-    <button id="profile-qr-backdrop" class="profile-qr-backdrop" type="button" aria-label="Close QR popup"></button>
-    <section class="profile-qr-sheet" role="dialog" aria-modal="true" aria-labelledby="profile-qr-title">
-      <div class="profile-qr-handle" aria-hidden="true"></div>
-      <div class="profile-qr-sheet-header">
-        <h2 id="profile-qr-title">QR</h2>
-        <button id="close-profile-qr" type="button">Close</button>
-      </div>
-      <div class="profile-qr-content">
-        <!-- Replace public/profile-qr.png with the student's QR image. -->
-        <div class="profile-qr-image-wrap">
-          <img src="././public/qr.png" alt="Surya Narayan Mandal QR code" onerror="this.hidden=true; this.parentElement.classList.add('profile-qr-image-missing');">
-          <span>Add <code>public/profile-qr.png</code></span>
-        </div>
-        <dl class="profile-qr-details">
-          <div><dt>Name:</dt><dd>Surya Narayan Mandal</dd></div>
-          <div><dt>Program:</dt><dd>P132:B.Tech. (Computer Science and Engineering) (2023)</dd></div>
-          <div><dt>Hostel:</dt><dd>Boys Hostel-06- B508-Bed C (Standard Air Cooled 4 Seater)</dd></div>
-        </dl>
-      </div>
-    </section>
   </div>
 
-  <script src="profile.js"></script>
+  <!-- Sections Container -->
+  <div class="bg-white mx-4 mt-2 mb-6 border border-gray-200 shadow-sm">
+    
+    <!-- Basic Section -->
+    <div class="bg-[#333333] text-white py-2.5 text-center font-medium text-[15px]">
+      Basic
+    </div>
+    <div class="px-4 py-2">
+      <!-- Item -->
+      <div class="py-2">
+        <p class="text-gray-600 font-medium text-[14px]">Father's Name</p>
+        <p class="text-gray-500 text-[14px] mt-0.5">Sujit Mandal</p>
+      </div>
+      <!-- Item -->
+      <div class="py-2">
+        <p class="text-gray-600 font-medium text-[14px]">Mother's Name</p>
+        <p class="text-gray-500 text-[14px] mt-0.5">Rachana Devi Mandal</p>
+      </div>
+      <!-- Item -->
+      <div class="py-2">
+        <p class="text-gray-600 font-medium text-[14px]">Permanent Address</p>
+        <p class="text-gray-500 text-[14px] mt-0.5 leading-snug">Gital Para, Haidarpara, Ward No 40,,Siliguri - 734006-Distt:Darjeeling -(West Bengal) - India</p>
+      </div>
+      <!-- Item -->
+      <div class="py-2">
+        <p class="text-gray-600 font-medium text-[14px]">Correspondence Address</p>
+        <p class="text-gray-500 text-[14px] mt-0.5 leading-snug">Gital Para, Haidarpara, Ward No 40,,Siliguri - 734006-Distt:Darjeeling -(West Bengal) - India</p>
+      </div>
+      <!-- Item -->
+      <div class="py-2">
+        <p class="text-gray-600 font-medium text-[14px]">Contact No.</p>
+        <p class="text-gray-500 text-[14px] mt-0.5">7602548747</p>
+      </div>
+      <!-- Item -->
+      <div class="py-2">
+        <p class="text-gray-600 font-medium text-[14px]">Email</p>
+        <p class="text-gray-500 text-[14px] mt-0.5">suryanmandal393@gmail.com</p>
+      </div>
+      <!-- Item -->
+      <div class="py-2">
+        <p class="text-gray-600 font-medium text-[14px]">Date Of Birth</p>
+        <p class="text-gray-500 text-[14px] mt-0.5">03 Sep 2003</p>
+      </div>
+      <!-- Item -->
+      <div class="py-2">
+        <p class="text-gray-600 font-medium text-[14px]">Student Gender</p>
+        <p class="text-gray-500 text-[14px] mt-0.5">Male</p>
+      </div>
+    </div>
+
+    <!-- Academic Details Section -->
+    <div class="bg-[#333333] text-white py-2.5 text-center font-medium text-[15px]">
+      Academic Details
+    </div>
+    <div class="px-4 py-2">
+      <div class="py-2">
+        <p class="text-gray-600 font-medium text-[14px]">Program</p>
+        <p class="text-gray-500 text-[14px] mt-0.5 leading-snug">P132:B.Tech. (Computer Science and Engineering)<br>(2023)</p>
+      </div>
+      <div class="py-2">
+        <p class="text-gray-600 font-medium text-[14px]">Admission Session</p>
+        <p class="text-gray-500 text-[14px] mt-0.5">2023-1</p>
+      </div>
+      <div class="py-2">
+        <p class="text-gray-600 font-medium text-[14px]">Batch</p>
+        <p class="text-gray-500 text-[14px] mt-0.5">2023</p>
+      </div>
+      <div class="py-2">
+        <p class="text-gray-600 font-medium text-[14px]">Section</p>
+        <p class="text-gray-500 text-[14px] mt-0.5">K4P23CW</p>
+      </div>
+      <div class="py-2">
+        <p class="text-gray-600 font-medium text-[14px]">TPC</p>
+        <p class="text-gray-500 text-[14px] mt-0.5">20339::Dr. Usha Mittal (01824520140)</p>
+      </div>
+    </div>
+
+    <!-- Hostel Details Section -->
+    <div class="bg-[#333333] text-white py-2.5 text-center font-medium text-[15px]">
+      Hostel Details
+    </div>
+    <div class="px-4 py-2">
+      <div class="py-2">
+        <p class="text-gray-600 font-medium text-[14px]">Hostel</p>
+        <p class="text-gray-500 text-[14px] mt-0.5 leading-snug">Boys Hostel-06- B508-Bed C (Standard Air Cooled 4 Seater)</p>
+      </div>
+      <div class="py-2">
+        <p class="text-gray-600 font-medium text-[14px]">Warden</p>
+        <p class="text-gray-500 text-[14px] mt-0.5">34862::Karnail Singh Jaryal (9501110445)</p>
+      </div>
+      <div class="py-2">
+        <p class="text-gray-600 font-medium text-[14px]">Allocated Mess</p>
+        <p class="text-gray-500 text-[14px] mt-0.5">Boys Mess - 1</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    lucide.createIcons();
+  </script>
 </body>
 </html>
