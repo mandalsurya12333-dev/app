@@ -51,6 +51,7 @@ function getSavedHostelDetails() {
 }
 
 function openHostelChangeModal() {
+  initHostelModalEvents();
   const modal = document.getElementById('modal-hostel-change');
   const input = document.getElementById('input-hostel-details');
   const successMsg = document.getElementById('hostel-save-success');
@@ -59,6 +60,7 @@ function openHostelChangeModal() {
   input.value = getSavedHostelDetails();
   if (successMsg) successMsg.classList.add('hidden');
   modal.classList.remove('hidden');
+  modal.style.display = 'flex';
   if (window.lucide) {
     lucide.createIcons();
   }
@@ -67,7 +69,10 @@ function openHostelChangeModal() {
 
 function closeHostelChangeModal() {
   const modal = document.getElementById('modal-hostel-change');
-  if (modal) modal.classList.add('hidden');
+  if (modal) {
+    modal.classList.add('hidden');
+    modal.style.display = 'none';
+  }
 }
 
 function initHostelModalEvents() {
