@@ -159,7 +159,7 @@
         <div class="photo"><img src="./public/profile.png" alt="Surya Narayan Mandal" onerror="this.hidden=true"></div>
         <h2>Surya Narayan Mandal</h2>
         <strong>Program Name</strong><p>P132:B.Tech. (Computer Science and Engineering)</p>
-        <strong style="margin-top:12px">Hostel</strong><p>Boys Hostel-06- B508-Bed C</p>
+        <strong style="margin-top:12px">Hostel</strong><p id="student-hostel-val">Boys Hostel-06- B508-Bed C</p>
       </section>
       <section class="card"><p>Tap on the meal name to<br>scan and avail food.</p><button class="rate" type="button">⭐ RATE US</button><div class="meals"><button class="meal" data-meal="Breakfast">BreakFast&nbsp; →</button><button class="meal" data-meal="Lunch">Lunch&nbsp; →</button><button class="meal" data-meal="Dinner">Dinner&nbsp; →</button></div></section>
     </div>
@@ -191,7 +191,7 @@
           <div><dt>Father's Name</dt><dd>Sujit Mandal (7602548747)</dd></div>
           <div><dt>Mother's Name</dt><dd>Rachana Devi Mandal (7602548747)</dd></div>
           <div><dt>Session</dt><dd>P132:B.Tech. (Computer Science and<br>Engineering) (2027)</dd></div>
-          <div><dt>Hostel</dt><dd>Boys Hostel-06- B508-Bed B (Standard Air<br>Cooled 4 Seater)</dd></div>
+          <div><dt>Hostel</dt><dd id="pass-hostel-val">Boys Hostel-06- B508-Bed B (Standard Air<br>Cooled 4 Seater)</dd></div>
         </dl>
       </section>
       <section class="verification-code" aria-label="Verification code"><span>Verification Code</span><strong>20773978</strong></section>
@@ -439,6 +439,17 @@
       tyBox.classList.remove('pop');
       setTimeout(() => tyModal.classList.remove('open'), 200);
     });
+
+    try {
+      const savedHostel = localStorage.getItem('user_hostel_details');
+      if (savedHostel !== null) {
+        const studentHostelEl = document.getElementById('student-hostel-val');
+        const passHostelEl = document.getElementById('pass-hostel-val');
+        const text = savedHostel.trim() || '-';
+        if (studentHostelEl) studentHostelEl.textContent = text;
+        if (passHostelEl) passHostelEl.textContent = text;
+      }
+    } catch(e) {}
   </script>
 </body>
 </html>

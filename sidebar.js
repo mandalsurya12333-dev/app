@@ -21,6 +21,7 @@ const menuItems = [
   { icon: 'public/sidebar/holidays.png', label: 'Library Search' },
   { icon: 'public/sidebar/holidays.png', label: 'Summer Term Registration' },
   { icon: 'public/sidebar/hostel-leave.png', label: 'Hostel Leave Slip' },
+  { icon: 'public/sidebar/hostel-leave.png', label: 'Hostel Change', id: 'hostelchange' },
 
   { icon: 'public/sidebar/holidays.png', label: 'Mess Food Scanner' },
   { icon: 'public/sidebar/pep.png', label: 'PEP Activities' },
@@ -41,14 +42,97 @@ const sidebarBackdrop = document.getElementById('sidebar-backdrop');
 const menuSearch = document.getElementById('menu-search');
 const menuItemsContainer = document.getElementById('menu-items-container');
 
+// --- HOSTEL CHANGE MODAL LOGIC ---
+const DEFAULT_HOSTEL_DETAILS = "Boys Hostel-06- B508-Bed C (Standard Air Cooled 4 Seater)";
+
+function getSavedHostelDetails() {
+  const saved = localStorage.getItem('user_hostel_details');
+  return saved === null ? DEFAULT_HOSTEL_DETAILS : saved;
+}
+
+function openHostelChangeModal() {
+  const modal = document.getElementById('modal-hostel-change');
+  const input = document.getElementById('input-hostel-details');
+  const successMsg = document.getElementById('hostel-save-success');
+  if (!modal || !input) return;
+
+  input.value = getSavedHostelDetails();
+  if (successMsg) successMsg.classList.add('hidden');
+  modal.classList.remove('hidden');
+  if (window.lucide) {
+    lucide.createIcons();
+  }
+  setTimeout(() => input.focus(), 50);
+}
+
+function closeHostelChangeModal() {
+  const modal = document.getElementById('modal-hostel-change');
+  if (modal) modal.classList.add('hidden');
+}
+
+function initHostelModalEvents() {
+  const btnClose = document.getElementById('btn-close-hostel-modal');
+  const btnCancel = document.getElementById('btn-cancel-hostel-modal');
+  const btnClear = document.getElementById('btn-clear-hostel');
+  const btnDefault = document.getElementById('btn-default-hostel');
+  const btnSave = document.getElementById('btn-save-hostel');
+  const modal = document.getElementById('modal-hostel-change');
+  const input = document.getElementById('input-hostel-details');
+  const successMsg = document.getElementById('hostel-save-success');
+
+  if (btnClose) btnClose.onclick = closeHostelChangeModal;
+  if (btnCancel) btnCancel.onclick = closeHostelChangeModal;
+  if (modal) {
+    modal.onclick = (e) => {
+      if (e.target === modal) closeHostelChangeModal();
+    };
+  }
+
+  if (btnClear && input) {
+    btnClear.onclick = () => {
+      input.value = '';
+      input.focus();
+    };
+  }
+
+  if (btnDefault && input) {
+    btnDefault.onclick = () => {
+      input.value = DEFAULT_HOSTEL_DETAILS;
+      input.focus();
+    };
+  }
+
+  if (btnSave && input) {
+    btnSave.onclick = () => {
+      const val = input.value.trim();
+      localStorage.setItem('user_hostel_details', val);
+      if (successMsg) {
+        successMsg.classList.remove('hidden');
+      }
+      setTimeout(() => {
+        closeHostelChangeModal();
+      }, 1000);
+    };
+  }
+}
+
 // --- RENDER LOGIC ---
 function renderMenuItems(filter = '') {
   menuItemsContainer.innerHTML = '';
-  const filtered = menuItems.filter(item => item.label.toLowerCase().includes(filter.toLowerCase()));
+  const searchClean = filter.toLowerCase().replace(/\s+/g, '');
+  const filtered = menuItems.filter(item => {
+    const labelClean = item.label.toLowerCase().replace(/\s+/g, '');
+    const idClean = (item.id || '').toLowerCase().replace(/\s+/g, '');
+    return labelClean.includes(searchClean) || idClean.includes(searchClean) || item.label.toLowerCase().includes(filter.toLowerCase());
+  });
   
   filtered.forEach(item => {
     const btn = document.createElement('button');
-    btn.className = 'w-full flex items-center px-4 py-4 hover:bg-gray-50 border-b border-gray-100 transition-colors';
+    if (item.id) {
+      btn.id = item.id;
+      btn.setAttribute('name', item.id);
+    }
+    btn.className = 'w-full flex items-center px-4 py-4 hover:bg-gray-50 border-b border-gray-100 transition-colors cursor-pointer text-left';
     
     // Instead of lucide icons or emojis, we use an img placeholder for custom icons
     btn.innerHTML = `
@@ -61,6 +145,12 @@ function renderMenuItems(filter = '') {
     btn.onclick = () => {
       if (item.label === 'Mess Food Scanner') {
         window.location.href = 'mess-scanner.html';
+        return;
+      }
+
+      if (item.id === 'hostelchange' || item.label === 'Hostel Change') {
+        sidebarMenu.classList.add('hidden');
+        openHostelChangeModal();
         return;
       }
 
@@ -87,3 +177,7 @@ menuSearch.oninput = (e) => {
 
 // Initialize
 renderMenuItems();
+initHostelModalEvents();
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initHostelModalEvents);
+}
